@@ -1,53 +1,20 @@
 package dev.eduperezn.screenmatch.modelos;
 
-public class Pelicula {
-    private String nombre;
-    private int fechaDeLanzamiento;
-    private int duracionEnMinutos;
-    private boolean incluidoEnElPlan;
-    private double sumaDeLasEvalucaiones;
-    private int totalDeLasEvaluaciones;
+import dev.eduperezn.screenmatch.calculos.Clasificacion;
 
-    //**********Setters**********
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+public class Pelicula extends Titulo implements Clasificacion {
+    private String director;
+
+    public String getDirector(){
+        return director;
     }
 
-    public void setFechaDeLanzamiento(int fechaDeLanzamiento){
-        this.fechaDeLanzamiento = fechaDeLanzamiento;
+    public void setDirector(String director){
+        this.director = director;
     }
 
-    public void setDuracionEnMinutos(int duracionEnMinutos){
-        this.duracionEnMinutos = duracionEnMinutos;
+    @Override
+    public int getClasificacion() {
+        return (int)calculaMeida()/2;
     }
-
-    public void setIncluidoEnElPlan(boolean incluidoEnElPlan){
-        this.incluidoEnElPlan = incluidoEnElPlan;
-    }
-
-    //**********Getters**********
-
-    //Encapsulación
-    public int getTotalDeLasEvaluaciones(){
-        return totalDeLasEvaluaciones;
-    }
-
-    //Metodo sin retorno de datos
-    public void muestraFichaTecnica(){
-        System.out.println("El nombre de la pelicula es: "+nombre);
-        System.out.println("Su fecha de lanzamiento es: "+fechaDeLanzamiento);
-        System.out.println("Duración en minutos: "+duracionEnMinutos);
-    }
-
-    //Metodo con entrada de datos
-    public void evalua(double nota){
-        sumaDeLasEvalucaiones += nota;
-        totalDeLasEvaluaciones ++;
-    }
-
-    //metodo con retorno de datos
-    public double calculaMeida(){
-        return sumaDeLasEvalucaiones / totalDeLasEvaluaciones;
-    }
-
 }
