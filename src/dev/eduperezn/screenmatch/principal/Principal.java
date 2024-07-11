@@ -1,3 +1,5 @@
+package dev.eduperezn.screenmatch.principal;
+
 import dev.eduperezn.screenmatch.calculos.CalculadoraDeTiempo;
 import dev.eduperezn.screenmatch.calculos.FiltroRecomendacion;
 import dev.eduperezn.screenmatch.modelos.Episodio;

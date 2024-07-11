@@ -1,7 +1,12 @@
 package dev.eduperezn.screenmatch.modelos;
 
-public class Titulo {
+import com.google.gson.annotations.SerializedName;
+
+public class Titulo implements Comparable<Titulo>{
+
+    @SerializedName("Title")
     private String nombre;
+    @SerializedName("Year")
     private int fechaDeLanzamiento;
     private int duracionEnMinutos;
     private boolean incluidoEnElPlan;
@@ -12,6 +17,12 @@ public class Titulo {
          this.nombre = nombre;
          this.fechaDeLanzamiento = fechaDeLanzamiento;
      }
+
+    public Titulo(TituloOmdb miTituloOmdb) {
+         this.nombre = miTituloOmdb.title();
+         this.fechaDeLanzamiento = Integer.valueOf(miTituloOmdb.year());
+         this.duracionEnMinutos = Integer.valueOf(miTituloOmdb.runtime().substring(0,2));
+    }
 
     //**********Setters**********
     public void setNombre(String nombre) {
@@ -66,5 +77,18 @@ public class Titulo {
     //metodo con retorno de datos
     public double calculaMeida(){
         return sumaDeLasEvalucaiones / totalDeLasEvaluaciones;
+    }
+
+    @Override
+    public int compareTo(Titulo otroTitulo) {
+        return this.getNombre().compareTo(otroTitulo.getNombre());
+    }
+
+    @Override
+    public String toString() {
+        return "Titulo:" +
+                "nombre='" + nombre + '\'' +
+                ", fechaDeLanzamiento=" + fechaDeLanzamiento+
+                ", duración="+duracionEnMinutos;
     }
 }
