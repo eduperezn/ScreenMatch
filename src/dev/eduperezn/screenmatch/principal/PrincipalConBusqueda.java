@@ -9,58 +9,74 @@ import dev.eduperezn.screenmatch.modelos.TituloOmdb;
 
 import javax.sound.midi.Soundbank;
 import javax.swing.tree.ExpandVetoException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class PrincipalConBusqueda {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Scanner lectura = new Scanner(System.in);
-        System.out.println("Escriba el nombre de la pelicula");
-        var busqueda = lectura.nextLine();
+        List<Titulo> titulos = new ArrayList<>();
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
 
-        String direccion = "https://www.omdbapi.com/?t="+
-                busqueda.replace(" ","+")+
-                "&apikey=7ec80d6c";
+        while(true){
+            System.out.println("Escriba el nombre de la pelicula");
+            var busqueda = lectura.nextLine();
 
-        try{
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(direccion))
-                    .build();
+            if(busqueda.equalsIgnoreCase("salir")){
+                break;
+            }
 
-            HttpResponse<String> response = client
-                    .send(request, HttpResponse.BodyHandlers.ofString());
+            String direccion = "https://www.omdbapi.com/?t="+
+                    busqueda.replace(" ","+")+
+                    "&apikey=7ec80d6c";
 
-            String json = response.body();
-            System.out.println(json);
+            try{
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(direccion))
+                        .build();
 
-            Gson gson = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create();
+                HttpResponse<String> response = client
+                        .send(request, HttpResponse.BodyHandlers.ofString());
 
-            TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
-            System.out.println(miTituloOmdb);
+                String json = response.body();
+                System.out.println(json);
+
+                TituloOmdb miTituloOmdb = gson.fromJson(json, TituloOmdb.class);
+                System.out.println(miTituloOmdb);
 
 
-            Titulo miTitulo = new Titulo(miTituloOmdb);
-            System.out.println("Titulo ya convertido: " + miTitulo);
+                Titulo miTitulo = new Titulo(miTituloOmdb);
+                System.out.println("Titulo ya convertido: " + miTitulo);
 
-        }catch (NumberFormatException e){
-            System.out.println("Ocurrio un error: ");
-            System.out.println(e.getMessage());
-        }catch (IllegalArgumentException e){
-            System.out.println("Error en la URI, verifique la direccion");
-        }catch (ErrorEnConversionDeDuracionException e){
-            System.out.println(e.getMensaje());
+                titulos.add(miTitulo);
+
+
+            }catch (NumberFormatException e){
+                System.out.println("Ocurrio un error: ");
+                System.out.println(e.getMessage());
+            }catch (IllegalArgumentException e){
+                System.out.println("Error en la URI, verifique la direccion");
+            }catch (ErrorEnConversionDeDuracionException e){
+                System.out.println(e.getMensaje());
+            }
         }
+        System.out.println(titulos);
 
+        FileWriter escritura = new FileWriter("titulos.json");
+        escritura.write(gson.toJson(titulos));
+        escritura.close();
         System.out.println("Finalizó la ejecución del programa");
-
-
     }
 }

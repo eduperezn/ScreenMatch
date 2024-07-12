@@ -5,9 +5,7 @@ import dev.eduperezn.screenmatch.exception.ErrorEnConversionDeDuracionException;
 
 public class Titulo implements Comparable<Titulo>{
 
-    @SerializedName("Title")
     private String nombre;
-    @SerializedName("Year")
     private int fechaDeLanzamiento;
     private int duracionEnMinutos;
     private boolean incluidoEnElPlan;
@@ -92,9 +90,8 @@ public class Titulo implements Comparable<Titulo>{
 
     @Override
     public String toString() {
-        return "Titulo:" +
-                "nombre='" + nombre + '\'' +
+        return "(nombre=" + nombre +
                 ", fechaDeLanzamiento=" + fechaDeLanzamiento+
-                ", duración="+duracionEnMinutos;
+                ", duración="+duracionEnMinutos+")";
     }
 }
